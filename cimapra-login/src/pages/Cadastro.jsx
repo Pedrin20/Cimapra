@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import bcrypt from 'bcryptjs';
 import { Link } from 'react-router-dom';
 import axios from "axios";
 
@@ -10,31 +9,27 @@ function Cadastro() {
   const [nomeCompleto, setNomeCompleto] = useState('');
   const [mensagem, setMensagem] = useState('');
 
-  const handleCadastro = (e) => {
-    e.preventDefault();
-    const senhaHash = bcrypt.hashSync(senha, 10);
-    const novoUsuario = { nomeUsuario, senhaHash, email, nomeCompleto };
-    console.log('Usuário cadastrado:', novoUsuario);
-    setMensagem('Cadastro realizado com sucesso!');
+  const handleCadastro = async (e) => {
+  e.preventDefault();
+  try {
+    const resposta = await axios.post("http://localhost:3000/api/usuarios", {
+      nomeUsuario,
+      senha,
+      email,
+      nomeCompleto
+    });
+    console.log(resposta.data);
+    setMensagem("Cadastro realizado com sucesso!");
     setNomeUsuario('');
     setSenha('');
     setEmail('');
     setNomeCompleto('');
-  };
+  } catch (erro) {
+    console.error("Erro ao cadastrar:", erro.response?.data || erro.message);
+    setMensagem("Erro ao cadastrar usuário.");
+  }
+};
 
-  const handleCadastroteste = async () => {
-    try {
-      const resposta = await axios.post("http://localhost:3306/api/usuarios", {
-        nomeUsuario: "pedro",
-        senha: "123456",
-        email: "pedro@email.com",
-        nomeCompleto: "Pedro Henrique"
-      });
-      console.log(resposta.data);
-    } catch (erro) {
-      console.error("Erro ao cadastrar:", erro);
-    }
-  };
 
   return (
     <div className="container">

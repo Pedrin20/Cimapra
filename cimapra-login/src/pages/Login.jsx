@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // <- IMPORTAÇÃO CORRETA
-import bcrypt from 'bcryptjs';
+import { useNavigate } from 'react-router-dom'; 
 import "../styles/App.css";
+import axios from 'axios'; 
 
 function Login() {
   const [usuario, setUsuario] = useState('');
@@ -9,24 +9,27 @@ function Login() {
   const [mensagem, setMensagem] = useState('');
   const navigate = useNavigate(); // <- USO CORRETO
 
-  const usuarioCadastrado = {
-    nome: 'admin',
-    senhaHash: bcrypt.hashSync('123456', 10),
-  };
+const handleLogin = async (e) => {
+  e.preventDefault();
+  try {
+    const resposta = await axios.post("http://localhost:3000/api/login", {
+      nomeUsuario: usuario,
+      senha: senha
+    });
+    console.log(resposta.data);
+    setMensagem("Login bem-sucedido!");
+    // Exemplo: navega para uma página protegida
+    // navigate("/dashboard");
+  } catch (erro) {
+    console.error("Erro ao fazer login:", erro.response?.data || erro.message);
+    setMensagem("Usuário ou senha inválidos.");
+  }
+};
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    const senhaValida = bcrypt.compareSync(senha, usuarioCadastrado.senhaHash);
-    if (usuario === usuarioCadastrado.nome && senhaValida) {
-      setMensagem('Login bem-sucedido!');
-    } else {
-      setMensagem('Usuário ou senha inválidos.');
-    }
-  };
+const irParaCadastro = () => {
+  navigate("/cadastro");
+};
 
-  const irParaCadastro = () => {
-    navigate("/cadastro");
-  };
 
   return (
     <div className="container">

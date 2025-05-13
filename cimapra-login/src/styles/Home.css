@@ -1,0 +1,25 @@
+.home-container {
+  padding: 1rem;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #003366;
+  padding: 1rem;
+  color: white;
+}
+
+.navbar button {
+  background-color: #ff4d4d;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  color: white;
+  border-radius: 5px;
+}
+
+.conteudo {
+  margin-top: 2rem;
+}
